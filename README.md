@@ -8,7 +8,7 @@ A linear style gauge for Node-RED Dashboard 2.0.
 
 ## Install
 
-The usual method of installing is to use Manage Palette in the node red editor and search for @hotnipi/node-red-dashboard-2-ui-gauge-linear and install it.
+The usual method of installing is to use Manage Palette in the node red editor and search for @hotnipi/node-red-dashboard-2-ui-edgewise-meter and install it.
 
 Using `npm` directly, `cd` into your node red user directory (usually .node-red in your home folder) and from there run
 ```
@@ -29,8 +29,8 @@ Certain configuration values can be overridden dynamically be passing in an obje
 * **Label** - A text label that is shown above the gauge's display.
 * **Limits Min and Max** - These specify the range of the gauge. Values are mandatory.
 * **Digits** - This defines count of the digits on gauge display. Note that not every combination of Min, Max and Digits count can satisfy even spreading of the digits. Change any of those to get positive result. The Alternate sizes option makes every second digit smaller.
-* **Display size** - The display size affects gap between digits. If size is too small, the digits can't be rendered to the correct positions and the dosplay shows error on runtime.
-* **Sectors** - This defines a set of coloured sectors.  Each row defines the start value of the sector and the colour to be used.  The sectors must be defined in increasing start value order, so the colour defined in one row applies up to the value defined in the next row, or the end of the scale if it is the last one. To make a gap between colored sections define the sector to be transparent by ticking th transparent option.
+* **Display size** - The display size affects gap between digits. If size is too small, the digits can't be rendered to the correct positions and the display shows error on runtime.
+* **Sectors** - This defines a set of coloured sectors.  Each row defines the start value of the sector and the colour to be used.  The sectors must be defined in increasing start value order, so the colour defined in one row applies up to the value defined in the next row, or the end of the scale if it is the last one. To make a gap between colored sections define the sector to be transparent by ticking the transparent option.
 * **Animation** - The display moves in x-axis. Choose animation type or turn off aminations completely.
 * **Dark mode** - The appearance of the display can be adjusted based on background of the group. Use dark mode if you have dark group background.
 * **Logo** - Small print on the display can be changed to any string.
