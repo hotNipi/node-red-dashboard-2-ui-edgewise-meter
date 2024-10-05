@@ -2,6 +2,9 @@
 
 A linear style gauge for Node-RED Dashboard 2.0.
 
+![Edgewise Meter image](https://github.com/user-attachments/assets/7cdff7cb-8a79-4fc5-b3c9-d1e97f028b85)
+
+
 ## Install
 
 The usual method of installing is to use Manage Palette in the node red editor and search for @hotnipi/node-red-dashboard-2-ui-gauge-linear and install it.
