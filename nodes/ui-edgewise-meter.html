@@ -1,0 +1,330 @@
+<script type="text/javascript">
+    RED.nodes.registerType('ui-edgewise-meter', {
+        category: RED._('@flowfuse/node-red-dashboard/ui-base:ui-base.label.category'),
+        color: RED._('@flowfuse/node-red-dashboard/ui-base:ui-base.colors.dark'),
+        defaults: {
+            name: { value: "" },
+            group: { type: 'ui-group', required: true },
+            order: { value: 0 },  
+            width: {
+                value: 0,
+                validate: function (v) {
+                    const width = v || 0
+                    const currentGroup = $('#node-input-group').val() || this.group
+                    const groupNode = RED.nodes.node(currentGroup)
+                    const valid = !groupNode || +width <= +groupNode.width
+                    $('#node-input-size').toggleClass('input-error', !valid)
+                    return valid
+                }
+            },
+            height: { value: 0 },
+            min: { 
+                value: 0,      
+                required: true,
+                validate:function(v) {
+                    const max=Number($("#node-input-max").length ? $("#node-input-max").val() : this.max)
+                    return (RED.validators.number()(v) && Number(v) < max)
+                },
+            },
+            max: { 
+                value: 10,
+                required:true,  
+                validate:function(v) {
+                    const min=Number($("#node-input-min").length ? $("#node-input-min").val() : this.min)
+                    return (RED.validators.number()(v) && Number(v) > min)
+                },
+            },
+            label: {value: "Edgewise Meter"},
+            count:{
+                value:20,
+                required: true,
+                validate:function(v){
+                    const min=Number($("#node-input-min").length ? $("#node-input-min").val() : this.min)
+                    const max=Number($("#node-input-max").length ? $("#node-input-max").val() : this.max)
+                    const c = Number(v)
+
+                    return(RED.validators.number()(v) && Number(v) >= 10 && getPrecision(1,{min:min,max:max,count:c}) > 0)
+                },
+            },
+            displaysize:{value:700,required: true},
+            sectors:{value:[]},
+            dark:{value:false},
+            smallDigits:{value:true},
+            animation:{value:"ease"},
+            precision:{value:1},
+            logo:{value:""},
+            myclass: {value: ""},
+        },
+        inputs: 1,
+        outputs: 0,
+        icon: "font-awesome/fa-ellipsis-h",
+        paletteLabel: "edgewise meter",
+        label: function() {
+            return this.name || "edgewise meter";
+        },
+        oneditprepare: function () {
+            let node = this           
+            $('#node-input-size').elementSizer({
+                width: '#node-input-width',
+                height: '#node-input-height',
+                group: '#node-input-group'
+            });
+
+            $("#node-input-min").typedInput({              
+                types: ["num"]
+            });
+            $("#node-input-max").typedInput({              
+                types: ["num"]
+            });
+            $("#node-input-count").typedInput({              
+                types: ["num"]
+            });
+            $("#node-input-displaysize").typedInput({              
+                types: ["num"]
+            });
+            
+            let sectorsList = $("#node-input-sectors-container")
+            sectorsList.editableList({
+                addItem: function(container, i, sector) {                   
+                    let newAddition = false   
+                    if (!sector.hasOwnProperty("start")) {                       
+                        newAddition = true
+                        sector = {start: "", color: ""}
+                        if (i === 0) {
+                            sector.start = Math.min(Number($("#node-input-min").val()), Number($("#node-input-max").val())) || "0"
+                        }
+                    }
+                    let row =  $('<div/>', {
+                        class: 'form-row',
+                        style: 'display: flex; margin-bottom: 0;'
+                    }).appendTo(container)
+                   
+                    let startField = $('<input/>', {
+                        type: 'text',
+                        name: i, 
+                        required: true,
+                        style: 'margin-left: 5px; margin-bottom: 0;',
+                        class: 'node-input-sector-start-value',
+                        value:sector.start
+                    }).appendTo(row).typedInput({types: ['num']}); 
+                   
+                    startField.on("change keyup paste", function() {                        
+                        validateSectors(sectorsList)
+                    });
+                    let colorField = $('<input/>', {
+                        type: 'color',
+                        style: 'width:80px; margin-left: 5px; margin-bottom: 0;',
+                        class: 'node-input-sector-color-value'
+                    }).appendTo(row)
+                    colorField.val(sector.color)
+
+                    let transparentField = $('<input/>', {
+                        type: 'checkbox',                      
+                        style: 'margin-left: 5px; margin-bottom: 0; width:14px;',
+                        class: 'node-input-sector-transparent-value',
+                        id: "node-input-sector-transparent-value"                        
+                    }).appendTo(row)
+
+                    transparentField.prop('checked', sector.color == "transparent");
+                    colorField.css('display',sector.color == "transparent"  ? "none" : "block")
+                    transparentField.on('change',function(){
+                        colorField.css('display',$(this).is(":checked") ? "none" : "block")
+                    })
+
+                    
+
+                    $(`<label/>`, {                       
+                        style:'margin-left: 5px; margin-block: auto;',
+                        for: "node-input-sector-transparent-value",
+                        text:"Transparent"                                             
+                    }).appendTo(row)                    
+                    if (newAddition) {
+                        validateSectors(sectorsList)
+                    }
+                },
+
+                sortable: true,
+                removable: true,
+                height: 'auto',
+                scrollOnAdd: true,
+                header: $('<div>').append(
+                    $.parseHTML(
+                        "<div style='width:40%; margin-left:10%; display:inline-grid;'>Start</div><div style='width:30%; display:inline-grid;'>Colour</div>"
+                    )
+                ),
+
+                addButton: 'add sector',
+
+                removeItem: function(data) {                   
+                    renumberSectors(sectorsList)
+                    validateSectors(sectorsList)
+                },
+
+                sortItems: function(items) {                    
+                    renumberSectors(sectorsList)
+                    validateSectors(sectorsList)
+                }
+            })
+            this.sectors = this.sectors || []          
+            sectorsList.editableList('addItems', this.sectors)          
+            validateSectors(sectorsList)
+        },
+        oneditsave: function() {
+            let node = this;
+            let sectors = $("#node-input-sectors-container").editableList('items');
+            node.sectors = [];
+            sectors.each(function(i) {
+                node.sectors.push({
+                    start: $(this).find('.node-input-sector-start-value').typedInput('value'),
+                    color: $(this).find('.node-input-sector-transparent-value').is(":checked") ? "transparent" : $(this).find('.node-input-sector-color-value').val()
+                })
+            });
+            node.precision = getPrecision(1) 
+        }         
+    })
+
+    function getPrecision (p, opt){ 
+        const max =  $("#node-input-max").val() ?? opt.max;
+        const min =  $("#node-input-min").val() ?? opt.min
+        const count = $("#node-input-count").val() ?? opt.count       
+        let t = ((max * p) - (min * p)) / count
+        let valid = (t * p) % count == 0
+        if(valid){
+            return p
+        }
+        else{
+            for(let i=0;i<4;++i){
+                p *= 10;
+                t = ((max * p) - (min * p)) / count
+                valid = (t * p) % count == 0
+                if (valid){
+                    break
+                }
+            }
+        }
+        if(valid){
+            return p
+        }
+        else{           
+            return 0
+        }
+    }
+
+    function renumberSectors(sectorsList) {        
+        let index = 0
+        sectorsList.find(".node-input-sector-start-value").each(function() {
+            this.name = index++           
+        })
+    }
+
+    function validateSectors(sectorsList) {       
+        const startValueFields = sectorsList.find(".node-input-sector-start-value")       
+        let values = []
+        startValueFields.each(function() {            
+            values.push(Number(this.value))
+        })
+        startValueFields.each(function() {
+            validateSectorStartField(this, values)
+        })
+    }
+
+    function validateSectorStartField(startField, values) {       
+        const startValue = startField.value;
+        const thisIndex = Number(startField.name)
+        let valid = true
+        if (!RED.validators.number()(startValue)) {
+            console.log(`not number`)
+            valid = false
+        } else {          
+            if (thisIndex > 0  &&  Number(startValue) <= values[thisIndex-1]) {
+                console.log(`a`)
+                valid = false
+            } else {               
+                if (thisIndex < values.length-1  &&  Number(startValue) >= values[thisIndex+1])
+                {
+                    console.log(`b`)
+                    valid = false
+                }
+            }
+        }       
+        if (!valid) {         
+            $(startField).closest(".form-row").find(".red-ui-typedInput-container").css('outline', '1px solid rgb(214, 97, 95)');
+        }
+        else {
+            $(startField).closest(".form-row").find(".red-ui-typedInput-container").css('outline', '');
+        }
+    }
+</script>
+<style>
+    .ewm.form-row label .fa{
+        margin-right: 4px;
+    }
+
+</style>
+<script type="text/html" data-template-name="ui-edgewise-meter">
+    <div class="form-row ewm">
+        <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></label>
+        <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
+    </div>
+    <div class="form-row ewm">
+        <label for="node-input-group"><i class="fa fa-table"></i> <span data-i18n="ui-edgewise-meter.label.group"></label>
+        <input type="text" id="node-input-group">
+    </div>
+    <div class="form-row nr-db-ui-element-sizer-row">
+        <label><i class="fa fa-object-group"></i> <span data-i18n="ui-edgewise-meter.label.size"></label>
+        <button class="editor-button" id="node-input-size"></button>
+    </div>
+    <div class="form-row ewm">
+        <label for="node-input-label"><i class="fa fa-i-cursor"></i> <span data-i18n="ui-edgewise-meter.label.label"></span></label>
+        <input type="text" id="node-input-label">
+    </div>
+    <div class="form-row ewm">
+        <label for="node-input-min" ><i class="fa fa-expand"></i> <span data-i18n="ui-edgewise-meter.label.limits"></span></label>       
+        <label for="node-input-min" style="width:auto" data-i18n="ui-edgewise-meter.label.min"></label>
+        <input type="text" id="node-input-min" style="width:90px">
+        <label for="node-input-max" style="width:auto; margin-left:20px;" data-i18n="ui-edgewise-meter.label.max"></label>
+        <input type="text" id="node-input-max" style="width:90px">
+    </div>
+    <div class="form-row ewm">
+        <label for="node-input-count"><i class="fa fa-ellipsis-h"></i> <span data-i18n="ui-edgewise-meter.label.count"></span></label>
+        <input type="text" id="node-input-count" style="width:90px; margin-right:5px;">
+        <label for="node-input-smallDigits"><span data-i18n="ui-edgewise-meter.label.smalldigits"></span></label>
+        <input type="checkbox" id="node-input-smallDigits" style="width:unset; margin-block: auto;">
+    </div>
+    <div class="form-row ewm">
+        <label for="node-input-displaysize"><i class="fa fa-arrows-h"></i> <span data-i18n="ui-edgewise-meter.label.displaysize"></span></label>
+        <input type="text" id="node-input-displaysize" style="width:90px;">
+    </div>
+
+   
+    
+    
+    <div class="form-row ewm">
+        <label><i class="fa fa-list fa-sort-numeric-asc"></i>  <span data-i18n="ui-edgewise-meter.label.sectors"></label>
+        <ol id="node-input-sectors-container"></ol>
+    </div>
+
+    <div class='form-row ewm'>
+        <label for='node-input-animation'><i class='fa fa-sign-language'></i><span data-i18n="ui-edgewise-meter.label.animation"></label>
+        <select id='node-input-animation' style='width:200px !important'>
+            <option value='ease' data-i18n="ui-edgewise-meter.label.ease"></option>
+            <option value='cubic' data-i18n="ui-edgewise-meter.label.cubic"></option>      
+            <option value='none' data-i18n="ui-edgewise-meter.label.none"></option>      
+        </select>
+    </div>
+    <div class="form-row ewm">
+        <label for="node-input-dark"><i class='fa fa-paint-brush'></i><span data-i18n="ui-edgewise-meter.label.dark"></span></label>
+        <input type="checkbox" id="node-input-dark" style="width:unset; margin-block: auto;">
+    </div>
+
+    <div class="form-row ewm">
+        <label for="node-input-logo"><i class="fa fa-smile-o"></i> <span data-i18n="ui-edgewise-meter.label.logo"></span></label>
+        <input type="text" id="node-input-logo">
+    </div>
+    <div class="form-row">
+        <label for="node-input-myclass"><i class="fa fa-hand"></i>Class</label>
+        <input type="text" id="node-input-myclass">
+    </div>
+
+   
+</script>

@@ -1,0 +1,150 @@
+
+.hotnipi-ewm-light{
+    --hotnipi-ewm-mix:20%;
+    --hotnipi-ewm-shadow:rgba(var(--v-theme-on-group-background),var(--hotnipi-ewm-mix));
+    --hotnipi-ewm-background:rgb(var(--v-theme-group-background));
+    --hotnipi-ewm-outline:rgba(var(--v-theme-on-group-background),40%);
+}
+.hotnipi-ewm-dark{
+    --hotnipi-ewm-mix: 75%;
+    --hotnipi-ewm-shadow: rgba(var(--v-theme-group-background), var(--hotnipi-ewm-mix));
+    --hotnipi-ewm-background: rgb(var(--v-theme-on-group-background));
+    --hotnipi-ewm-outline: rgba(var(--v-theme-group-background), 100%);
+}
+.hotnipi-ewm-wrapper{
+    display: grid;   
+    gap: 1rem;
+    align-items: center;
+    height: 100%;
+}
+.hotnipi-ewm-label {
+    min-width: 1rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.hotnipi-ewm-body {   
+    position: relative;
+    min-width: 3rem;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-content: center;       
+}
+
+.hotnipi-ewm-body.hotnipi-ewm-light {    
+    filter: drop-shadow(0px 2px 4px var(--hotnipi-ewm-shadow));
+}
+
+.hotnipi-ewm-display {
+    width: 100%;
+    height: 100%;
+    display:flex;
+    justify-content: center;
+    position: relative;
+    box-sizing: border-box;
+    overflow: hidden;
+    border: 3px solid var(--hotnipi-ewm-shadow);
+    background-color: var(--hotnipi-ewm-background);
+    outline: 1px solid var(--hotnipi-ewm-outline);
+    outline-offset: -2px;
+    border-radius: 6px;
+    box-shadow: inset 0 0 9px 1px var(--hotnipi-ewm-shadow);   
+}
+
+.hotnipi-ewm-display::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, var(--hotnipi-ewm-shadow), transparent 30%, transparent 70%, var(--hotnipi-ewm-shadow));
+}
+
+.hotnipi-ewm-backplate {
+    width: calc(var(--hotnipi-ewm-size) * 1px);
+    flex-shrink: 0;
+    position: relative;        
+}
+
+.hotnipi-ewm-numbers {
+    position:relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 100%;
+    font-size: 1.25rem;
+    word-wrap: normal;
+    align-content: center;   
+    transform: translateX(-50%);
+    transition: var(--hotnipi-ewm-easing);
+}
+
+.hotnipi-ewm-numbers :nth-child(even){
+    font-size: var(--hotnipi-ewm-small-digits);
+}
+
+.hotnipi-ewm-numbers:after {
+    content: "";
+    position: absolute;
+    right: 0%;
+    width: 100%;
+    top: 0px;
+    height: 25%;    
+    background: var(--hotnipi-ewm-gradient,repeating-linear-gradient(to right, #00000040, #00000040 40%, transparent 40%, transparent));
+    background-size: 4px, 100%;
+}
+.hotnipi-ewm-numbers:before {
+    content: var(--hotnipi-ewm-logo,"Made in Estonia hotNipi ® Gauges");
+    position: absolute;
+    font-size: xx-small;   
+    text-align: end;
+    inset: 0;
+    width: 20ch;
+    translate: -120%;
+    color: var(--hotnipi-ewm-outline);
+}
+
+.hotnipi-ewm-num {
+    position: relative;
+    text-align: center;   
+    width: 100%;
+    color: black;
+    align-self: flex-end;
+    border-bottom: 3px solid transparent;          
+}
+
+.hotnipi-ewm-needle {
+    position: absolute;
+    left: calc(50% - 0.5px);
+    top: 0;
+    width: 1px;
+    height: 100%;
+    background-color: #eb1e1e;
+    box-shadow: 0px 0px 7px 2px var(--hotnipi-ewm-shadow);
+}
+.hotnipi-ewm-dark .hotnipi-ewm-needle {
+     box-shadow: 0px 0px 12px 1px var(--hotnipi-ewm-shadow);
+}
+.hotnipi-ewm-size-error {
+    position: absolute;
+    inset: 0;
+    font-size: x-small;
+    color:red;
+    text-align: center;
+    display: flex; 
+    justify-content:center;
+}
+.hotnipi-ewm-size-error > p{
+    max-width: 140px;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.0;
+  }
+}
+.hotnipi-ewm-blink{   
+  animation: blink 4s step-start 0s infinite;
+}
+.hotnipi-ewm-blonk{    
+  animation: blink 4s step-start 2s infinite;
+}

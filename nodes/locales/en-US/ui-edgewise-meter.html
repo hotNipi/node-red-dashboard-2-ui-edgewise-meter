@@ -1,23 +1,13 @@
-# node-red-dashboard-2-ui-edgewise-meter
-
+<script type="text/markdown" data-help-name="ui-edgewise-meter">
 A linear style gauge for Node-RED Dashboard 2.0.
 
-## Install
+### Inputs
 
-The usual method of installing is to use Manage Palette in the node red editor and search for @hotnipi/node-red-dashboard-2-ui-gauge-linear and install it.
-
-Using `npm` directly, `cd` into your node red user directory (usually .node-red in your home folder) and from there run
-```
-npm install @hotnipi/node-red-dashboard-2-ui-edgewise-meter
-```
-
-## Inputs
-
-Pass the value in `msg.payload`.  This may be a Number or a string that represents a number.
+: payload (number | string) :  The value to show on the gauge. If a string is passed in then it must represent a number.
 
 Certain configuration values can be overridden dynamically be passing in an object in `msg.ui_update`.  See Dynamic Properties below.
 
-## Configuration
+### Configuration
 
 * **Name** - The name of the node.
 * **Group** - The display group in which to show the gauge.
@@ -32,7 +22,7 @@ Certain configuration values can be overridden dynamically be passing in an obje
 * **Logo** - Small print on the display can be changed to any string.
 * **Class** - A CSS Class that will be applied to the gauge to allow override of display element style.
 
-## Dynamic Properties
+### Dynamic Properties
 
 Certain properties can be overridden by passing an object in `msg.ui_update`.  The name of the item in `msg.ui_update` is generally the name of the propety being overridden.  For example, the Sectors definitions may be changed by passing in array in `msg.ui_update.sectors`.  
 
@@ -46,7 +36,7 @@ Certain properties can be overridden by passing an object in `msg.ui_update`.  T
 
 
 
-## CSS overrides
+### CSS overrides
 
 Display elements my be overriden in the normal way using a ui-template node.  In particular:
 
@@ -56,3 +46,4 @@ Display elements my be overriden in the normal way using a ui-template node.  In
     color:red !important ;
 }
 ```
+</script>

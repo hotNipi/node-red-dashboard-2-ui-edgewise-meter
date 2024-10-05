@@ -1,0 +1,22 @@
+{
+    "ui-edgewise-meter": {
+        "label": {
+            "group": "Group",
+            "size": "Size",
+            "label": "Label",
+            "min": "Min",
+            "max": "Max",
+            "limits": "Limits",
+            "count": "Digits",
+            "displaysize": "Display size",
+            "sectors": "Sectors",
+            "logo": "Logo",
+            "animation":"Animation",
+            "ease":"Ease In Out",
+            "cubic":"Cubic Bezier",
+            "none":"None",
+            "smalldigits":"Alternate sizes",
+            "dark":"Dark mode"
+        }
+    }
+}
