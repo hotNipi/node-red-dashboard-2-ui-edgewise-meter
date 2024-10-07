@@ -1,7 +1,7 @@
 {
   "name": "@hotnipi/node-red-dashboard-2-ui-edgewise-meter",
   "version": "0.0.2",
-  "description": "A edgewise meter gauge node for @flowfuse/node-red-dashboard",
+  "description": "An edgewise meter gauge node for @flowfuse/node-red-dashboard",
   "keywords": [
     "node-red",
     "node-red-dashboard-2",
