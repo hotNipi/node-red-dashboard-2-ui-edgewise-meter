@@ -50,10 +50,13 @@
             sectors:{value:[]},
             dark:{value:false},
             smallDigits:{value:true},
+            miniDisplay:{value:"none"},
+            miniDisplayProps:{value:"bottom-left"},
             animation:{value:"ease"},
             precision:{value:1},
-            logo:{value:""},
+            logo:{value:""},            
             myclass: {value: ""},
+
         },
         inputs: 1,
         outputs: 0,
@@ -82,7 +85,15 @@
             $("#node-input-displaysize").typedInput({              
                 types: ["num"]
             });
-            
+           
+            $('input:radio[name="appearance"]').filter('[value='+node.miniDisplayProps+']').attr('checked', true);
+                       
+            $('#emw-appearance-select-row').css('display',node.miniDisplay == "none" ? "none" : "block");
+            $('#node-input-miniDisplay').change(function(){
+                $('#emw-appearance-select-row').css('display',$(this).val() == "none" ? "none" : "block");
+            })
+
+
             let sectorsList = $("#node-input-sectors-container")
             sectorsList.editableList({
                 addItem: function(container, i, sector) {                   
@@ -122,7 +133,7 @@
                         type: 'checkbox',                      
                         style: 'margin-left: 5px; margin-bottom: 0; width:14px;',
                         class: 'node-input-sector-transparent-value',
-                        id: "node-input-sector-transparent-value"                        
+                        id: "node-input-sector-transparent-value-"+i                        
                     }).appendTo(row)
 
                     transparentField.prop('checked', sector.color == "transparent");
@@ -135,7 +146,7 @@
 
                     $(`<label/>`, {                       
                         style:'margin-left: 5px; margin-block: auto;',
-                        for: "node-input-sector-transparent-value",
+                        for: "node-input-sector-transparent-value-"+i,
                         text:"Transparent"                                             
                     }).appendTo(row)                    
                     if (newAddition) {
@@ -179,7 +190,16 @@
                     color: $(this).find('.node-input-sector-transparent-value').is(":checked") ? "transparent" : $(this).find('.node-input-sector-color-value').val()
                 })
             });
-            node.precision = getPrecision(1) 
+            node.precision = getPrecision(1)
+            let appearance = $('input:radio[name="appearance"]')
+            console.log(appearance)
+            appearance.each(function(){                
+                if($(this).is(":checked")){
+                    node.miniDisplayProps = $(this).val()
+                }              
+            })
+            
+            
         }         
     })
 
@@ -259,6 +279,72 @@
     .ewm.form-row label .fa{
         margin-right: 4px;
     }
+    .ewm.form-row .ewm-radios label:not(.emw-radios-main-label) {
+        width:unset;
+    }
+    .ewm-radios{
+        display:flex;
+    }
+    .ewm-radios label {
+        cursor: pointer;
+        position: relative;
+        
+    }
+
+    .ewm-radios label + label {
+        margin-left: 6px;
+    }
+
+    .ewm-radios input[type="radio"] {
+        opacity: 0;
+        position: absolute;
+        width:unset;
+    }
+
+    .ewm-radios input[type="radio"] + span {       
+        display: inline-block;
+        position:relative;
+        border-radius: 4px;
+        outline: 2px solid var(--red-ui-form-input-border-color);;
+        height: 23px;
+        aspect-ratio: 7/4;
+        padding-inline: 6px;
+    }
+
+    .ewm-radios input[type="radio"] + span:before{
+        content:"";
+        position:absolute;
+        display:block;
+        width:35%;
+        height:35%;
+        border-radius: 2px;
+        outline:1px solid var(--red-ui-form-input-border-color);;
+    }
+    .ewm-radios input[type="radio"] + span.ewm-big:before{
+        height:20px;
+        top:2px;
+    
+    }
+    .ewm-radios input[type="radio"] + span.ewm-top:before{
+        top:2px;
+    }
+    .ewm-radios input[type="radio"] + span.ewm-bottom:before{
+        bottom:2px;
+    }
+    .ewm-radios input[type="radio"] + span.ewm-left:before{
+        left:2px;
+    }
+    .ewm-radios input[type="radio"] + span.ewm-right:before{
+        right:2px;
+    }
+    .ewm-radios input[type="radio"]:checked + span {   
+        background-color: var(--red-ui-form-button-background);
+        outline-color: var(--red-ui-form-input-border-selected-color);
+    }
+    .ewm-radios input[type="radio"]:checked + span:before {
+        outline-color: var(--red-ui-form-input-border-selected-color);
+        background-color: var(--red-ui-form-input-background)   
+    }
 
 </style>
 <script type="text/html" data-template-name="ui-edgewise-meter">
@@ -305,6 +391,48 @@
         <label><i class="fa fa-list fa-sort-numeric-asc"></i>  <span data-i18n="ui-edgewise-meter.label.sectors"></label>
         <ol id="node-input-sectors-container"></ol>
     </div>
+
+    <div class="form-row ewm">
+        <label for='node-input-miniDisplay'><i class='fa fa-newspaper-o'></i><span data-i18n="ui-edgewise-meter.label.exactvaluedisplay"></label>
+        <select id='node-input-miniDisplay' style='width:200px !important'>
+            <option value='none' data-i18n="ui-edgewise-meter.label.dontshow"></option>      
+            <option value='hover' data-i18n="ui-edgewise-meter.label.hover"></option>
+            <option value='permanent' data-i18n="ui-edgewise-meter.label.permanent"></option>      
+        </select>
+    </div>
+
+    <div class="form-row ewm" id="emw-appearance-select-row">        
+        <div class="ewm-radios" id="emw-appearance-select">
+            <label class="emw-radios-main-label" for="emw-appearance-select"><i class="fa fa-wrench"></i> <span data-i18n="ui-edgewise-meter.label.appearance"></span></label>
+            <label for="ewm-bottom-left" >
+                <input type="radio" name="appearance" id="ewm-bottom-left" value="bottom-left"/>
+                <span class="ewm-bottom ewm-left"></span>
+            </label>                
+            <label for="ewm-top-left" >
+                <input type="radio" name="appearance" id="ewm-top-left" value="top-left"/>
+                <span class="ewm-top ewm-left"></span>
+            </label>
+            <label for="ewm-top-right" >
+                <input type="radio" name="appearance" id="ewm-top-right" value="top-right"/>
+                <span class="ewm-top ewm-right"></span>
+            </label>
+            <label for="ewm-bottom-right" >
+                <input type="radio" name="appearance" id="ewm-bottom-right" value="bottom-right"/>
+                <span class="ewm-bottom ewm-right"></span>
+            </label>
+            <label for="ewm-big-left" >
+                <input type="radio" name="appearance" id="ewm-big-left" value="big-left"/>
+                <span class="ewm-big ewm-left"></span>
+            </label>
+            <label for="ewm-big-right" >
+                <input type="radio" name="appearance" id="ewm-big-right" value="big-right"/>
+                <span class="ewm-big ewm-right"></span>
+            </label>
+        </div>
+    </div>
+
+
+
 
     <div class='form-row ewm'>
         <label for='node-input-animation'><i class='fa fa-sign-language'></i><span data-i18n="ui-edgewise-meter.label.animation"></label>

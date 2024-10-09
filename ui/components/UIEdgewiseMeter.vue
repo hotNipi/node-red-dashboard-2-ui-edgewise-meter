@@ -12,7 +12,8 @@
                     </div>
                 </div>
                 <div ref="needle" class="hotnipi-ewm-needle"></div>
-            </div>    
+            </div>
+            <div v-if="'miniDisplay != none'" class="hotnipi-ewm-exact" :class="miniDisplayProps"><p>{{ formatted }}</p></div>    
         </div>
     </div>
 </template>
@@ -58,10 +59,14 @@ export default {
     },
     computed: {
         ...mapState('data', ['messages']),
+        formatted:function(){
+            return Math.round(this.value * this.precision) / this.precision
+        }
     },
     methods: {
         
-        applyProperties: function(){            
+        applyProperties: function(){ 
+            console.log(this.props)           
             this.min = Number(this.props.min)
             this.max = Number(this.props.max)
             this.count = Number(this.props.count)
@@ -73,7 +78,10 @@ export default {
             this.logo = this.props.logo 
             this.label = this.props.label
             this.animation = this.props.animation
-            this.class = this.props.myclass
+            this.class = this.props.myclass+" "+this.props.miniDisplay
+            this.miniDisplay = this.props.miniDisplay
+            this.miniDisplayProps = this.props.miniDisplayProps.split('-').join(" ")
+            this.value = this.min
         },
         
         generateNumbers:function(){
@@ -93,11 +101,18 @@ export default {
                 "--hotnipi-ewm-size": this.size,
                 "--hotnipi-ewm-small-digits":this.smallDigits ? "small" : "inherit",
                 "--hotnipi-ewm-gradient":this.sectorGradient(),
+                "--hotnipi-ewm-mini-display-size":this.miniDisplaySize(),
                 "--hotnipi-ewm-easing":this.animation == "none" ? "unset" : this.animation == "ease" ? "left 1s ease-in-out" : "left 1s cubic-bezier( 0.6, 0.06, 0.132, 1.15 )",
                 "grid-template-columns":this.label ? "auto 1fr" : "1fr",
             }
         },  
-        
+        miniDisplaySize:function(){
+            const mi = Math.abs(this.min)
+            const ma = Math.abs(this.max)
+            const n = Math.max(mi,ma).toString().length
+            const r = Number(n + this.precision.toString().length)
+            return  r
+        },
         
             
         sectorGradient: function(){

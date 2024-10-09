@@ -16,7 +16,12 @@
             "cubic":"Cubic Bezier",
             "none":"None",
             "smalldigits":"Alternate sizes",
-            "dark":"Dark mode"
+            "dark":"Dark mode",
+            "appearance":"Appearance",
+            "exactvaluedisplay":"Exact value",
+            "dontshow":"Don't show",
+            "hover":"Show on hover",
+            "permanent":"Show always"
         }
     }
 }
