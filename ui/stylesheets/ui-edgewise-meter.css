@@ -61,7 +61,7 @@
     bottom:0;
 }
 
-.fg-dark .hotnipi-ewm-exact{
+.hotnipi-ewm-dark .hotnipi-ewm-exact{
     color:rgba(var(--v-theme-on-group-background),80%);
     border: 1px solid var(--hotnipi-ewm-outline);
     background-color: rgba(var(--v-theme-group-background),60%);
