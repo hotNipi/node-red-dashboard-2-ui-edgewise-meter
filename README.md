@@ -2,7 +2,8 @@
 
 A linear style gauge for Node-RED Dashboard 2.0.
 
-![Edgewise Meter image](https://github.com/user-attachments/assets/6e37e40e-d9aa-4a12-8b70-f752c58ff9e2)
+![Node-RED gauge edgewise meter image](https://github.com/user-attachments/assets/ffe6d78d-d4e7-47e4-9145-3930433b0d2a)
+
 
 
 
