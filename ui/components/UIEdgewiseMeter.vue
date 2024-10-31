@@ -15,7 +15,7 @@
             </div>
             <div v-if="'miniDisplay != none'" class="hotnipi-ewm-exact" :class="miniDisplayProps"><p>{{ formatted }}</p></div>    
         </div>
-    </div>
+    </div>    
 </template>
 
 <script>
@@ -129,7 +129,10 @@ export default {
                 if(i == 0){
                     if(s.start == this.min){
                         gradient = gradient.concat(s.color,", ")
-                        if(i + 1 <= total){
+                        if(i==total){
+                            gradient = gradient.concat(s.color)
+                        }
+                        else if(i + 1 <= total){
                             pos = this.position(this.sectors[i+1].start).toString()
                             gradient = gradient.concat(s.color," ",pos,"%, ")
                         }
@@ -138,7 +141,12 @@ export default {
                         gradient = gradient.concat('transparent, transparent ')
                         pos = this.position(s.start).toString()
                         gradient = gradient.concat(pos,"%, ")
-                        if(i + 1 <= total){
+                        if(i == total){
+                            pos = this.position(s.start).toString()
+                            gradient = gradient.concat(s.color," ",pos,"%, ")
+                            gradient = gradient.concat(s.color)
+                        }
+                        else if(i + 1 <= total){
                             pos = this.position(s.start).toString()
                             gradient = gradient.concat(s.color," ",pos,"%, ")
                             pos = this.position(this.sectors[i+1].start).toString()
