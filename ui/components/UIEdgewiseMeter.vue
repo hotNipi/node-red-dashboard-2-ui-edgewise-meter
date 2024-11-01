@@ -46,6 +46,7 @@ export default {
             precision:1,                
             animation:"ease",
             logo:"",
+            unit:"",
 
 
             //local 
@@ -60,7 +61,7 @@ export default {
     computed: {
         ...mapState('data', ['messages']),
         formatted:function(){
-            return Math.round(this.value * this.precision) / this.precision
+            return (Math.round(this.value * this.precision) / this.precision).toString().concat(this.unit) ;
         }
     },
     methods: {
@@ -76,6 +77,7 @@ export default {
             this.dark = this.props.dark
             this.smallDigits = this.props.smallDigits
             this.logo = this.props.logo 
+            this.unit = this.props.unit ?? "";
             this.label = this.props.label
             this.animation = this.props.animation
             this.class = this.props.myclass+" "+this.props.miniDisplay
@@ -110,7 +112,8 @@ export default {
             const mi = Math.abs(this.min)
             const ma = Math.abs(this.max)
             const n = Math.max(mi,ma).toString().length
-            const r = Number(n + this.precision.toString().length)
+            const u = this.unit?.length ?? 0
+            const r = Number(n + u + this.precision.toString().length)
             return  r
         },
         

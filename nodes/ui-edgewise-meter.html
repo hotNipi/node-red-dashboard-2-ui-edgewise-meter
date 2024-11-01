@@ -55,6 +55,7 @@
             animation:{value:"ease"},
             precision:{value:1},
             logo:{value:""},            
+            unit:{value:""},            
             myclass: {value: ""},
 
         },
@@ -85,12 +86,17 @@
             $("#node-input-displaysize").typedInput({              
                 types: ["num"]
             });
+            $("#node-input-unit").typedInput({              
+                types: ["str"]
+            });
            
             $('input:radio[name="appearance"]').filter('[value='+node.miniDisplayProps+']').attr('checked', true);
                        
             $('#emw-appearance-select-row').css('display',node.miniDisplay == "none" ? "none" : "block");
+            $("#node-input-unit-group").css('display',node.miniDisplay == "none" ? "none" : "inline");
             $('#node-input-miniDisplay').change(function(){
                 $('#emw-appearance-select-row').css('display',$(this).val() == "none" ? "none" : "block");
+                $("#node-input-unit-group").css('display',$(this).val() == "none" ? "none" : "inline");
             })
 
 
@@ -141,8 +147,6 @@
                     transparentField.on('change',function(){
                         colorField.css('display',$(this).is(":checked") ? "none" : "block")
                     })
-
-                    
 
                     $(`<label/>`, {                       
                         style:'margin-left: 5px; margin-block: auto;',
@@ -307,7 +311,7 @@
         border-radius: 4px;
         outline: 2px solid var(--red-ui-form-input-border-color);;
         height: 23px;
-        aspect-ratio: 7/4;
+        aspect-ratio: 9/6;
         padding-inline: 6px;
     }
 
@@ -394,11 +398,15 @@
 
     <div class="form-row ewm">
         <label for='node-input-miniDisplay'><i class='fa fa-newspaper-o'></i><span data-i18n="ui-edgewise-meter.label.exactvaluedisplay"></label>
-        <select id='node-input-miniDisplay' style='width:200px !important'>
+        <select id='node-input-miniDisplay' style='width:180px !important'>
             <option value='none' data-i18n="ui-edgewise-meter.label.dontshow"></option>      
             <option value='hover' data-i18n="ui-edgewise-meter.label.hover"></option>
             <option value='permanent' data-i18n="ui-edgewise-meter.label.permanent"></option>      
         </select>
+        <div id="node-input-unit-group">
+            <label for="node-input-unit" style="width:auto; margin-left:8px;"><span data-i18n="ui-edgewise-meter.label.unit"></span></label>
+            <input type="text" id="node-input-unit" style="width:90px">
+        </div>
     </div>
 
     <div class="form-row ewm" id="emw-appearance-select-row">        

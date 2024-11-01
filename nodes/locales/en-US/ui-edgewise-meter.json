@@ -21,7 +21,8 @@
             "exactvaluedisplay":"Exact value",
             "dontshow":"Don't show",
             "hover":"Show on hover",
-            "permanent":"Show always"
+            "permanent":"Show always",
+            "unit":"Unit"
         }
     }
 }
