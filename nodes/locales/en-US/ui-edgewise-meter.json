@@ -22,7 +22,9 @@
             "dontshow":"Don't show",
             "hover":"Show on hover",
             "permanent":"Show always",
-            "unit":"Unit"
+            "unit":"Unit",
+            "class":"Class",
+            "coffee":"Coffee"
         }
     }
 }

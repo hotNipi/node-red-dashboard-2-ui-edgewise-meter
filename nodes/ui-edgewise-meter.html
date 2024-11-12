@@ -208,11 +208,12 @@
     })
 
     function getPrecision (p, opt){ 
+        const comp = [0,2,5]
         const max =  $("#node-input-max").val() ?? opt.max;
         const min =  $("#node-input-min").val() ?? opt.min
         const count = $("#node-input-count").val() ?? opt.count       
         let t = ((max * p) - (min * p)) / count
-        let valid = (t * p) % count == 0
+        let valid = comp.includes((t * p) % count)
         if(valid){
             return p
         }
@@ -220,7 +221,7 @@
             for(let i=0;i<4;++i){
                 p *= 10;
                 t = ((max * p) - (min * p)) / count
-                valid = (t * p) % count == 0
+                valid = comp.includes((t * p) % count)
                 if (valid){
                     break
                 }
@@ -281,6 +282,9 @@
 </script>
 <style>
     .ewm.form-row label .fa{
+        margin-right: 4px;
+    }
+    .ewm.form-row a .fa{
         margin-right: 4px;
     }
     .ewm.form-row .ewm-radios label:not(.emw-radios-main-label) {
@@ -459,10 +463,12 @@
         <label for="node-input-logo"><i class="fa fa-smile-o"></i> <span data-i18n="ui-edgewise-meter.label.logo"></span></label>
         <input type="text" id="node-input-logo">
     </div>
-    <div class="form-row">
-        <label for="node-input-myclass"><i class="fa fa-hand"></i>Class</label>
+    <div class="form-row ewm">
+        <label for="node-input-myclass"><i class="fa fa-font"></i><span data-i18n="ui-edgewise-meter.label.class"></label>
         <input type="text" id="node-input-myclass">
     </div>
-
+    <div class="form-row ewm">
+        <a href="https://buymeacoffee.com/hotnipi" target="_blank"><i class="fa fa-coffee"></i><span data-i18n="ui-edgewise-meter.label.coffee"></span></label></a>       
+    </div>
    
 </script>

@@ -64,3 +64,5 @@ Display elements my be overriden in the normal way using a ui-template node.  In
     color:red !important ;
 }
 ```
+
+<a href="https://www.buymeacoffee.com/hotnipi" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-green.png" alt="Buy Me A Coffee" style="height: 40px !important;width:150px !important;" ></a>
