@@ -55,13 +55,14 @@ export default {
             timeout:null,
             styles:{},
             numbers:[0],
+            rounder:100,
             class: "",
         }
     },
     computed: {
         ...mapState('data', ['messages']),
         formatted:function(){
-            return (Math.round(this.value * this.precision) / this.precision).toString().concat(this.unit) ;
+            return (Math.round(this.value * this.rounder) / this.rounder).toString().concat(this.unit) ;
         }
     },
     methods: {
@@ -84,6 +85,7 @@ export default {
             this.miniDisplay = this.props.miniDisplay
             this.miniDisplayProps = this.props.miniDisplayProps.split('-').join(" ")
             this.value = this.min
+            this.rounder = Math.max(this.precision, 100)
         },
         
         generateNumbers:function(){
@@ -109,11 +111,12 @@ export default {
             }
         },  
         miniDisplaySize:function(){
+            
             const mi = Math.abs(this.min)
             const ma = Math.abs(this.max)
             const n = Math.max(mi,ma).toString().length
             const u = this.unit?.length ?? 0
-            const r = Number(n + u + this.precision.toString().length)
+            const r = Number(n + u + this.rounder.toString().length)
             return  r
         },
         
