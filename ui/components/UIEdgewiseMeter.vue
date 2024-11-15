@@ -68,7 +68,7 @@ export default {
     methods: {
         
         applyProperties: function(){ 
-            console.log(this.props)           
+          //  console.log(this.props)           
             this.min = Number(this.props.min)
             this.max = Number(this.props.max)
             this.count = Number(this.props.count)
