@@ -208,19 +208,22 @@
     })
 
     function getPrecision (p, opt){ 
-        const comp = [0,2,5]
+        const comp = [0,1,2,5]
         const max =  $("#node-input-max").val() ?? opt.max;
         const min =  $("#node-input-min").val() ?? opt.min
         const count = $("#node-input-count").val() ?? opt.count       
-        let t = ((max * p) - (min * p)) / count
+        const distance = Math.abs(min-max)
+        let t = distance * p / count
         let valid = comp.includes((t * p) % count)
+        console.log("distance", distance,t,count,(t * p) % count)
+
         if(valid){
             return p
         }
         else{
             for(let i=0;i<4;++i){
                 p *= 10;
-                t = ((max * p) - (min * p)) / count
+                t = distance * p / count
                 valid = comp.includes((t * p) % count)
                 if (valid){
                     break
