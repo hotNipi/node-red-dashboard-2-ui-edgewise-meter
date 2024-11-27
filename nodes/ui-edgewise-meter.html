@@ -57,6 +57,7 @@
             logo:{value:""},            
             unit:{value:""},            
             myclass: {value: ""},
+            property: { value: "payload", required: true },
 
         },
         inputs: 1,
@@ -73,6 +74,10 @@
                 height: '#node-input-height',
                 group: '#node-input-group'
             });
+            if (this.property === undefined) {
+                $("#node-input-property").val("payload");
+            }
+            $("#node-input-property").typedInput({ default: 'msg', types: ['msg'] });
 
             $("#node-input-min").typedInput({              
                 types: ["num"]
@@ -376,6 +381,10 @@
     <div class="form-row ewm">
         <label for="node-input-label"><i class="fa fa-i-cursor"></i> <span data-i18n="ui-edgewise-meter.label.label"></span></label>
         <input type="text" id="node-input-label">
+    </div>
+    <div class="form-row ewm">
+        <label for="node-input-property"><i class="fa fa-arrow-right"></i> <span data-i18n="ui-edgewise-meter.label.input"></span></label>
+        <input type="text" id="node-input-property" style="min-width:261px;"/>
     </div>
     <div class="form-row ewm">
         <label for="node-input-min" ><i class="fa fa-expand"></i> <span data-i18n="ui-edgewise-meter.label.limits"></span></label>       

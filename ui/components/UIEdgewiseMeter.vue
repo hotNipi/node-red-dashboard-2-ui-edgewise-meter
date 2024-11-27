@@ -57,6 +57,7 @@ export default {
             numbers:[0],
             rounder:100,
             class: "",
+            property:"payload"
         }
     },
     computed: {
@@ -86,6 +87,7 @@ export default {
             this.miniDisplayProps = this.props.miniDisplayProps.split('-').join(" ")
             this.value = this.min
             this.rounder = Math.max(this.precision, 100)
+            this.property = this.props.property || 'payload'
         },
         
         generateNumbers:function(){

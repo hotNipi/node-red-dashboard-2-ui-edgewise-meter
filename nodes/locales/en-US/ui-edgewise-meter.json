@@ -24,7 +24,8 @@
             "permanent":"Show always",
             "unit":"Unit",
             "class":"Class",
-            "coffee":"Coffee"
+            "coffee":"Coffee",
+            "input":"Input"
         }
     }
 }
