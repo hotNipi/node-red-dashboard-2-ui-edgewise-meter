@@ -18,7 +18,7 @@ npm install @hotnipi/node-red-dashboard-2-ui-edgewise-meter
 
 ## Inputs
 
-Pass the value in `msg.payload`.  This may be a Number or a string that represents a number.
+Pass the value in configured property or as default `msg.payload` .  This may be a Number or a string that represents a number.
 
 Certain configuration values can be overridden dynamically be passing in an object in `msg.ui_update`.  See Dynamic Properties below.
 
@@ -28,6 +28,7 @@ Certain configuration values can be overridden dynamically be passing in an obje
 * **Group** - The display group in which to show the gauge.
 * **Size** - The size of the gauge on the dashboard.
 * **Label** - A text label that is shown above the gauge's display.
+* **Input** - Configured input property should carry single numeric value. 
 * **Limits Min and Max** - These specify the range of the gauge. Values are mandatory.
 * **Digits** - This defines count of the digits on gauge display. Note that not every combination of Min, Max and Digits count can satisfy even spreading of the digits. Change any of those to get positive result. The Alternate sizes option makes every second digit smaller.
 * **Display size** - The display size affects gap between digits. If size is too small, the digits can't be rendered to the correct positions and the display shows error on runtime.
