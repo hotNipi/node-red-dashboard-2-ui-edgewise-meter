@@ -28,9 +28,10 @@ module.exports = function (RED) {
                 // does msg.ui_update exist and is an object?
                 if (typeof msg.ui_update === 'object' && !Array.isArray(msg.ui_update) && msg.ui_update !== null) {
                     // yes it does
-                    storedData.ui_update ??= {}    // initialise if necessary
-                    // merge in data from this message
-                    storedData.ui_update = {...storedData.ui_update, ...msg.ui_update}
+                    // merge ui_update data from this message into the state store
+                    for (const [key, value] of Object.entries(msg.ui_update)) {
+                        base.stores.state.set(base, node, msg, key, value)
+                    }
                 } else {
                     // delete any msg.ui_update so don't need to validate in clients
                     delete msg.ui_update
